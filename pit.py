@@ -27,18 +27,18 @@ WORD_BANK = {
     ],
     "Science": [
         "GALAXY", "NEUTRON", "ELECTRON", "MOLECULE", "NUCLEUS",
-        "PHOTON", "PROTON", "GRAVITY", "ENTROPY", "PLASMA",
-        "QUANTUM", "ISOTOPE", "CATALYST", "OSMOSIS", "CHROMOSOME",
+        "PHOTON", "PROTON", "GRAVITY", "BIOLOGY", "CHEMISTRY",
+        "QUANTUM", "ISOTOPE", "CATALYST", "PHYSICS", "CHROMOSOME",
     ],
     "Animals": [
         "ELEPHANT", "PENGUIN", "CROCODILE", "OCTOPUS", "CHEETAH",
         "DOLPHIN", "GORILLA", "HAMSTER", "JAGUAR", "KANGAROO",
         "LEOPARD", "MONGOOSE", "CAPYBARA", "MONKEY", "SALAMANDER",
     ],
-    "Geography": [
-        "ANTARCTICA", "HIMALAYA", "SAHARA", "AMAZON", "PACIFIC",
-        "EQUATOR", "VOLCANO", "GLACIER", "PENINSULA", "ARCHIPELAGO",
-        "MERIDIAN", "PLATEAU", "CANYON", "TUNDRA", "SAVANNA",
+    "FOOD": [
+        "CHICKEN WINGS", "AVOCADO", "PASTA", "CARBONARA", "SINIGANG",
+        "SHRIMP", "NACHO", "SUSHI", "SALAD", "SANDWICH",
+        "RICE", "FRIES", "BURITO", "CHEESE", "SUSHI",
     ],
 }
 
@@ -265,8 +265,8 @@ def show_category_menu():
     cat_frame = tk.Frame(root, bg=BG)
     cat_frame.place(relx=0.5, y=340, anchor="center")
 
-    colors = [GREEN, "#00BFFF", YELLOW, "#FF69B4"]
-    icons  = ["⌨", "🔬", "🐾", "🌍"]
+    colors = ["#00BFFF", GREEN, "YELLOW", "#BB0D0D"]
+    icons  = ["⌨", "🔬", "🐾", "😋"]
 
     for i, (cat, clr, icon) in enumerate(zip(WORD_BANK.keys(), colors, icons)):
         row = i // 2
