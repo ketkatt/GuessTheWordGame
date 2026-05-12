@@ -33,17 +33,14 @@ WORD_BANK = {
     "Animals": [
         "ELEPHANT", "PENGUIN", "CROCODILE", "OCTOPUS", "CHEETAH",
         "DOLPHIN", "GORILLA", "HAMSTER", "JAGUAR", "KANGAROO",
-        "LEOPARD", "MONGOOSE", "CAPYBARA", "MONKEY", "SALAMANDER",
+        "CAT", "MONGOOSE", "CAPYBARA", "MONKEY", "SALAMANDER",
     ],
-    "FOOD": [
-        "AVOCADO", "PASTA", "CARBONARA", "SINIGANG",
+    "Food": [
+        "AVOCADO", "PASTA", "CARBONARA", "SINIGANG", "LASAGNA",
         "SHRIMP", "NACHO", "SUSHI", "SALAD", "SANDWICH",
         "RICE", "FRIES", "KALE", "CHEESE", "BURGER",
     ],
 }
-
-#random picks
-ALL_WORDS = [w for words in WORD_BANK.values() for w in words]
 
 #game state
 chosen_word     = ""
@@ -92,7 +89,7 @@ def draw_hangman(canvas, wrong):
         sw = 3
         canvas.create_line(20, H-10, W-20, H-10, fill=scaffold, width=sw+1)
         canvas.create_line(60, H-10, 60, 20,    fill=scaffold, width=sw)
-        canvas.create_line(60, 20,  190, 20,    fill=scaffold, width=sw)
+        canvas.create_line(60, 20, 190, 20,    fill=scaffold, width=sw)
         canvas.create_line(190, 20, 190, 60,    fill=scaffold, width=sw)
 
         body_color = WHITE if wrong < max_wrong else RED
@@ -117,6 +114,7 @@ def draw_hangman(canvas, wrong):
             canvas.create_line(190, 185, 158, 225, fill=body_color, width=3)
         if wrong >= 6:
             canvas.create_line(190, 185, 222, 225, fill=body_color, width=3)
+
     except tk.TclError as e:
         print(f"[Warning] Could not draw hangman: {e}")
 
@@ -226,11 +224,11 @@ def show_main_menu():
     try:
         clear_screen()
 
-        canvas_bg = tk.Canvas(root, width=800, height=700, bg=BG, highlightthickness=0)
+        canvas_bg = tk.Canvas(root, width=1000, height=1000, bg=BG, highlightthickness=0)
         canvas_bg.place(x=0, y=0)
-        for row in range(0, 700, 28):
-            for col in range(0, 800, 28):
-                canvas_bg.create_oval(col, row, col+2, row+2, fill="#1E1E1E", outline="")
+        for row in range(0, 1000, 28):
+            for col in range(0, 1000, 28):
+                canvas_bg.create_oval(col, row, col+2, row+2, fill="#3C3B3B", outline="")
 
         tk.Label(root, text="GUESS THE WORD",
                  font=("Fixedsys", 52, "bold"),
@@ -322,7 +320,7 @@ def show_game_screen():
         global letter_buttons
         letter_buttons = {}
 
-        # Header
+# Header
         header = tk.Frame(root, bg=PANEL, height=54)
         header.pack(fill="x")
         header.pack_propagate(False)
@@ -338,7 +336,7 @@ def show_game_screen():
                   relief="flat", bd=0, cursor="hand2",
                   command=show_main_menu).place(x=18, rely=0.5, anchor="w")
 
-        # Category + lives
+# Category + lives
         category_label = tk.Label(root,
                                    text=f"Category: {chosen_category}",
                                    font=("Courier", 12, "bold"),
@@ -351,7 +349,7 @@ def show_game_screen():
                                 fg=WHITE, bg=BG)
         tries_label.pack()
 
-        # Top row: wrong guesses | hangman (center) | spacer
+# Top row: wrong guesses | hangman (center) | spacer
         top_row = tk.Frame(root, bg=BG)
         top_row.pack(fill="x", padx=20, pady=(4, 0))
 
@@ -360,7 +358,7 @@ def show_game_screen():
         wrong_col.pack(side="left", anchor="n")
         wrong_col.pack_propagate(False)
         tk.Label(wrong_col, text="WRONG GUESSES",
-                 font=("Courier", 9), fg=GRAY, bg=BG).pack(pady=(8, 2))
+                 font=("Courier", 11), fg=GRAY, bg=BG).pack(pady=(8, 2))
         tk.Label(wrong_col, textvariable=wrong_label_var,
                  font=("Courier", 13, "bold"),
                  fg=RED, bg=BG, wraplength=190, justify="center").pack()
@@ -373,7 +371,7 @@ def show_game_screen():
 
         tk.Frame(top_row, bg=BG, width=200).pack(side="left")
 
-        # Word grid
+# Word grid
         tk.Label(root, text="GUESS THE WORD",
                  font=("Courier", 11, "bold"),
                  fg=GRAY, bg=BG).pack(pady=(8, 4))
@@ -384,10 +382,10 @@ def show_game_screen():
 
         # Result label
         result_label = tk.Label(root, text="",
-                                 font=("Courier", 14, "bold"), bg=BG)
+                                 font=("Courier", 11, "bold"), bg=BG)
         result_label.pack(pady=(5, 0))
 
-        # Keyboard
+# Keyboard
         def patched_click(letter):
             try:
                 letter_click(letter)
@@ -400,11 +398,11 @@ def show_game_screen():
         keyboard_frame.pack(pady=(0, 4))
         create_keyboard_patched(keyboard_frame, patched_click)
 
-        # Bottom buttons
+# Bottom buttons
         bottom = tk.Frame(root, bg=BG)
         bottom.pack(pady=8)
 
-        tk.Button(bottom, text="NEW WORD",
+        tk.Button(bottom, text="NEW CATEGORY",
                   font=("Courier", 12, "bold"),
                   width=14, height=1,
                   bg=PANEL, fg=GREEN,
@@ -482,11 +480,12 @@ MAX_HINTS   = 3
 
 def use_hint(wrong_label_var):
     global wrong_guesses, _hints_used
+    
     try:
         if game_over:
             return
         if _hints_used >= MAX_HINTS:
-            result_label.config(text=f"No hints left! (max {MAX_HINTS})", fg=YELLOW)
+            result_label.config(text=f"No hints left! (max {MAX_HINTS})", fg=GRAY, font=("Courier", 11, "bold"), pady=3)
             return
         remaining = [l for l in chosen_word if l not in guessed_letters]
         if not remaining:
