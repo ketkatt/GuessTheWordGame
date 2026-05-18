@@ -256,7 +256,7 @@ def show_main_menu():
             )
 
         styled_btn(btn_frame, "▶  START",    GREEN,   lambda: show_category_menu()).pack(pady=7)
-        styled_btn(btn_frame, "RANDOM WORD", YELLOW,  lambda: (pick_word(), show_game_screen())).pack(pady=7)
+        styled_btn(btn_frame, "RANDOM WORD", YELLOW, lambda: restart_full_random()).pack(pady=7)
         styled_btn(btn_frame, "✕  QUIT",     "#333333", root.quit, width=18).pack(pady=7)
 
         tk.Label(root, text="← select a category or start randomly →",
@@ -512,6 +512,18 @@ def restart_game(same_category=False):
     global _hints_used
     _hints_used = 0
     _original_restart(same_category)
+
+def restart_full_random():
+    global chosen_word, chosen_category
+    global guessed_letters, wrong_guesses, game_over, letter_buttons
+
+    pick_word()
+    guessed_letters = []
+    wrong_guesses = 0
+    game_over = False
+    letter_buttons = {}
+
+    show_game_screen()
 
 #launch
 try:
